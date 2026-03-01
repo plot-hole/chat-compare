@@ -1,0 +1,193 @@
+[
+  {
+    "title": "Solar System Basics",
+    "create_time": 1738540800.0,
+    "update_time": 1738541400.0,
+    "mapping": {
+      "root-node-001": {
+        "id": "root-node-001",
+        "message": {
+          "id": "root-node-001",
+          "author": {"role": "system"},
+          "content": {"content_type": "text", "parts": ["You are a helpful assistant."]}
+        },
+        "parent": null,
+        "children": ["msg-user-001"]
+      },
+      "msg-user-001": {
+        "id": "msg-user-001",
+        "message": {
+          "id": "msg-user-001",
+          "author": {"role": "user"},
+          "content": {"content_type": "text", "parts": ["How many planets are in our solar system?"]}
+        },
+        "parent": "root-node-001",
+        "children": ["msg-asst-001"]
+      },
+      "msg-asst-001": {
+        "id": "msg-asst-001",
+        "message": {
+          "id": "msg-asst-001",
+          "author": {"role": "assistant"},
+          "content": {"content_type": "text", "parts": ["There are **8 planets** in our solar system. In order from the Sun, they are:\n\n1. **Mercury** \u2014 the smallest planet and closest to the Sun\n2. **Venus** \u2014 the hottest planet due to its thick atmosphere\n3. **Earth** \u2014 our home, the only planet known to support life\n4. **Mars** \u2014 the \"Red Planet,\" a target for future exploration\n5. **Jupiter** \u2014 the largest planet, a gas giant\n6. **Saturn** \u2014 famous for its spectacular ring system\n7. **Uranus** \u2014 an ice giant that rotates on its side\n8. **Neptune** \u2014 the most distant planet, known for its deep blue color\n\nPluto was reclassified as a \"dwarf planet\" by the International Astronomical Union in 2006, so it is no longer counted among the eight major planets."]}
+        },
+        "parent": "msg-user-001",
+        "children": ["msg-user-002"]
+      },
+      "msg-user-002": {
+        "id": "msg-user-002",
+        "message": {
+          "id": "msg-user-002",
+          "author": {"role": "user"},
+          "content": {"content_type": "text", "parts": ["Which planet has the most moons?"]}
+        },
+        "parent": "msg-asst-001",
+        "children": ["msg-asst-002"]
+      },
+      "msg-asst-002": {
+        "id": "msg-asst-002",
+        "message": {
+          "id": "msg-asst-002",
+          "author": {"role": "assistant"},
+          "content": {"content_type": "text", "parts": ["As of recent counts, **Saturn** holds the record for the most known moons, with over 140 confirmed natural satellites. Jupiter is a close second with over 90 confirmed moons.\n\nSome notable moons include:\n\n- **Titan** (Saturn) \u2014 the only moon with a dense atmosphere\n- **Europa** (Jupiter) \u2014 believed to have a subsurface ocean\n- **Ganymede** (Jupiter) \u2014 the largest moon in the solar system\n- **Enceladus** (Saturn) \u2014 has geysers of water ice\n\nIt's worth noting that new moons are still being discovered as telescope technology improves, so these numbers continue to change."]}
+        },
+        "parent": "msg-user-002",
+        "children": []
+      }
+    }
+  },
+  {
+    "title": "Basic Cooking Conversions",
+    "create_time": 1739145600.0,
+    "update_time": 1739146200.0,
+    "mapping": {
+      "root-node-002": {
+        "id": "root-node-002",
+        "message": {
+          "id": "root-node-002",
+          "author": {"role": "system"},
+          "content": {"content_type": "text", "parts": ["You are a helpful assistant."]}
+        },
+        "parent": null,
+        "children": ["msg-user-003"]
+      },
+      "msg-user-003": {
+        "id": "msg-user-003",
+        "message": {
+          "id": "msg-user-003",
+          "author": {"role": "user"},
+          "content": {"content_type": "text", "parts": ["How many tablespoons are in a cup?"]}
+        },
+        "parent": "root-node-002",
+        "children": ["msg-asst-003"]
+      },
+      "msg-asst-003": {
+        "id": "msg-asst-003",
+        "message": {
+          "id": "msg-asst-003",
+          "author": {"role": "assistant"},
+          "content": {"content_type": "text", "parts": ["There are **16 tablespoons** in 1 US cup.\n\nHere's a quick reference for common kitchen conversions:\n\n| Measurement | Equivalent |\n|---|---|\n| 1 cup | 16 tablespoons |\n| 1 cup | 8 fluid ounces |\n| 1 tablespoon | 3 teaspoons |\n| 1 cup | 48 teaspoons |\n| 1 cup | ~237 milliliters |\n\nKeep in mind that these are **US customary** measurements. If you're using a recipe from the UK or Australia, their cup sizes differ slightly (250 mL in Australia, for example)."]}
+        },
+        "parent": "msg-user-003",
+        "children": ["msg-user-004"]
+      },
+      "msg-user-004": {
+        "id": "msg-user-004",
+        "message": {
+          "id": "msg-user-004",
+          "author": {"role": "user"},
+          "content": {"content_type": "text", "parts": ["What about grams to ounces?"]}
+        },
+        "parent": "msg-asst-003",
+        "children": ["msg-asst-004"]
+      },
+      "msg-asst-004": {
+        "id": "msg-asst-004",
+        "message": {
+          "id": "msg-asst-004",
+          "author": {"role": "assistant"},
+          "content": {"content_type": "text", "parts": ["Here's the conversion between grams and ounces:\n\n**1 ounce = 28.3495 grams** (often rounded to 28.35 g)\n\nSome handy approximations for cooking:\n\n- **100 g** \u2248 3.5 oz\n- **250 g** \u2248 8.8 oz\n- **500 g** \u2248 17.6 oz (just over 1 pound)\n- **1 kg** (1000 g) \u2248 35.3 oz (about 2.2 pounds)\n\n**Pro tip:** For baking, weighing ingredients in grams with a digital scale is more accurate than using volume measurements like cups. A cup of flour can vary by 30% or more depending on how it's scooped, but 120 grams is always 120 grams."]}
+        },
+        "parent": "msg-user-004",
+        "children": ["msg-user-005"]
+      },
+      "msg-user-005": {
+        "id": "msg-user-005",
+        "message": {
+          "id": "msg-user-005",
+          "author": {"role": "user"},
+          "content": {"content_type": "text", "parts": ["What temperature should I bake a cake at?"]}
+        },
+        "parent": "msg-asst-004",
+        "children": ["msg-asst-005"]
+      },
+      "msg-asst-005": {
+        "id": "msg-asst-005",
+        "message": {
+          "id": "msg-asst-005",
+          "author": {"role": "assistant"},
+          "content": {"content_type": "text", "parts": ["The most common baking temperature for cakes is **350\u00b0F (175\u00b0C)**. However, it depends on the type of cake:\n\n- **Standard layer cakes / sheet cakes**: 350\u00b0F (175\u00b0C) for 25\u201335 minutes\n- **Pound cake**: 325\u00b0F (165\u00b0C) for 60\u201375 minutes (lower and slower for dense batter)\n- **Angel food cake**: 325\u00b0F (165\u00b0C) for 35\u201340 minutes\n- **Cupcakes**: 350\u00b0F (175\u00b0C) for 18\u201322 minutes\n- **Cheesecake**: 325\u00b0F (165\u00b0C) for 50\u201360 minutes\n\n**General guidelines:**\n1. Always preheat your oven fully before putting the cake in\n2. Use an oven thermometer to verify the actual temperature\n3. Test doneness with a toothpick inserted into the center \u2014 it should come out clean\n4. Avoid opening the oven door during the first 20 minutes\n\nIf you're using a convection (fan) oven, reduce the temperature by about 25\u00b0F (15\u00b0C) from what the recipe calls for."]}
+        },
+        "parent": "msg-user-005",
+        "children": []
+      }
+    }
+  },
+  {
+    "title": "Newton's Laws of Motion",
+    "create_time": 1739750400.0,
+    "update_time": 1739751000.0,
+    "mapping": {
+      "root-node-003": {
+        "id": "root-node-003",
+        "message": {
+          "id": "root-node-003",
+          "author": {"role": "system"},
+          "content": {"content_type": "text", "parts": ["You are a helpful assistant."]}
+        },
+        "parent": null,
+        "children": ["msg-user-006"]
+      },
+      "msg-user-006": {
+        "id": "msg-user-006",
+        "message": {
+          "id": "msg-user-006",
+          "author": {"role": "user"},
+          "content": {"content_type": "text", "parts": ["Can you explain Newton's three laws of motion?"]}
+        },
+        "parent": "root-node-003",
+        "children": ["msg-asst-006"]
+      },
+      "msg-asst-006": {
+        "id": "msg-asst-006",
+        "message": {
+          "id": "msg-asst-006",
+          "author": {"role": "assistant"},
+          "content": {"content_type": "text", "parts": ["Sure! Here are Newton's three laws of motion, explained with everyday examples:\n\n## First Law (Law of Inertia)\n\n**An object at rest stays at rest, and an object in motion stays in motion at constant velocity, unless acted upon by an external force.**\n\n*Example:* A book sitting on a table will stay there until you push it. A hockey puck sliding on ice will keep moving until friction or a wall stops it.\n\n## Second Law (F = ma)\n\n**The acceleration of an object is directly proportional to the net force acting on it and inversely proportional to its mass.**\n\nThe formula is:\n```\nForce = mass \u00d7 acceleration\nF = ma\n```\n\n*Example:* Pushing an empty shopping cart (low mass) accelerates it quickly. Pushing a full one (high mass) with the same force produces less acceleration.\n\n## Third Law (Action-Reaction)\n\n**For every action, there is an equal and opposite reaction.**\n\n*Example:* When you jump, your feet push down on the ground (action), and the ground pushes you upward (reaction). A rocket expels gas downward, and the gas pushes the rocket upward.\n\nThese three laws, published in 1687 in *Principia Mathematica*, form the foundation of classical mechanics and are still used today for everything from engineering to space travel."]}
+        },
+        "parent": "msg-user-006",
+        "children": ["msg-user-007"]
+      },
+      "msg-user-007": {
+        "id": "msg-user-007",
+        "message": {
+          "id": "msg-user-007",
+          "author": {"role": "user"},
+          "content": {"content_type": "text", "parts": ["When do Newton's laws break down?"]}
+        },
+        "parent": "msg-asst-006",
+        "children": ["msg-asst-007"]
+      },
+      "msg-asst-007": {
+        "id": "msg-asst-007",
+        "message": {
+          "id": "msg-asst-007",
+          "author": {"role": "assistant"},
+          "content": {"content_type": "text", "parts": ["Great question! Newton's laws work extremely well for everyday situations, but they break down in two important regimes:\n\n### 1. Very High Speeds (Special Relativity)\n\nWhen objects move at a significant fraction of the speed of light (about 300,000 km/s), Newton's laws become increasingly inaccurate. Einstein's **special relativity** (1905) replaces them. Key differences:\n\n- Mass effectively increases as speed increases\n- Nothing can exceed the speed of light\n- Time slows down for fast-moving objects (time dilation)\n\n### 2. Very Small Scales (Quantum Mechanics)\n\nAt the atomic and subatomic level, particles don't behave like tiny billiard balls. **Quantum mechanics** governs this domain, where:\n\n- Particles can exist in multiple states simultaneously (superposition)\n- You can't know both position and momentum precisely (Heisenberg uncertainty principle)\n- Particles can \"tunnel\" through barriers\n\n### 3. Very Strong Gravity (General Relativity)\n\nNear extremely massive objects like black holes, Newton's gravitational theory is insufficient. Einstein's **general relativity** (1915) describes gravity as curvature of spacetime.\n\nFor everyday engineering, sports, vehicles, and most earthly applications, Newton's laws remain perfectly accurate. They're only \"wrong\" in the sense that they're an approximation that works brilliantly within its domain."]}
+        },
+        "parent": "msg-user-007",
+        "children": []
+      }
+    }
+  }
+]

@@ -1,0 +1,17 @@
+pandas>=2.0
+pyarrow
+spacy>=3.7
+sentence-transformers
+scikit-learn
+bertopic
+umap-learn
+hdbscan
+matplotlib
+seaborn
+plotly
+markdownify
+textstat
+pyyaml
+click
+tqdm
+anthropic
