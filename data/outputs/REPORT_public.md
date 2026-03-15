@@ -35,7 +35,6 @@ Topic modeling (BERTopic over all assistant turns) reveals a division of labor. 
 
 **Gemini-dominant topics:**
   - **dolomites, switzerland, swiss, mountain** (39 turns, 69% Gemini)
-  - **ticket, car, crying, stress** (25 turns, 68% Gemini)
 
 Claude is the user's **technical co-pilot** — the go-to for writing code, building infrastructure, and working through security architecture. ChatGPT serves as the **high-volume generalist**, handling everything from health research to cooking to historical deep-dives across 1,570 conversations. Gemini handles the user's **life beyond the terminal**: veterinary questions, personal finance, and lifestyle research — but with ChatGPT's larger volume absorbing some of those categories, Gemini's topics are more evenly distributed.
 
