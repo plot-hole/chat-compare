@@ -11,12 +11,6 @@ analysis:
   topic_model_min_topic_size: 5
   max_conversations: null      # null = all, or set an int to limit
 
-llm_judge:
-  model: claude-sonnet-4-5-20250929
-  sample_size: 200              # Per source
-  min_turn_length: 50           # Skip very short responses (words)
-  max_concurrent: 5             # Rate limiting
-  cache_file: data/processed/llm_judge_cache.json
 
 viz:
   style: seaborn-v0_8-whitegrid

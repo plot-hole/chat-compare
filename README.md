@@ -1,6 +1,6 @@
 # Chatbot Conversation Analysis
 
-A Python toolkit that ingests your conversation exports from **Claude**, **Gemini**, and **ChatGPT**, normalizes them into a common schema, and runs linguistic, semantic, and LLM-as-judge analyses to compare how each platform writes, thinks, and talks.
+A Python toolkit that ingests your conversation exports from **Claude**, **Gemini**, and **ChatGPT**, normalizes them into a common schema, and runs linguistic and semantic analyses to compare how each platform writes, thinks, and talks.
 
 The goal is insight over volume. Not just word counts, but patterns in hedging language, intellectual depth, conversational style, and how your own writing shifts depending on which bot you're talking to.
 
@@ -8,15 +8,7 @@ The goal is insight over volume. Not just word counts, but patterns in hedging l
 
 ## Sample Findings
 
-Analysis of ~220 conversations across Claude and Gemini surfaces clear personality differences.
-
-### LLM-as-Judge: Depth & Creativity
-
-Claude Sonnet scored 400 sampled responses (200 per source) on intellectual depth and creativity using a 3-point rubric:
-
-![Judge Combined](docs/images/judge_combined.png)
-
-Claude scores higher on both depth (2.51 vs. 2.29, p=0.006) and creativity (2.32 vs. 2.15, p=0.037). Both differences are statistically significant (Mann-Whitney U). **Caveat**: Claude is judging its own responses here, creating a potential self-evaluation bias. Cross-reference with the traditional NLP metrics below.
+Analysis of ~1,790 conversations across Claude, Gemini, and ChatGPT surfaces clear personality differences.
 
 ### Opening Moves
 
@@ -55,11 +47,10 @@ This is arguably the most telling user-satisfaction signal in the dataset. If yo
 | **Temporal** | Monthly trends in response length, vocabulary richness, hedging rates, user effort, inflection point detection |
 | **Conversation Structure** | Turn dynamics, conversation depth, resolution patterns, rephrase detection via embedding similarity |
 | **User Behavior** | How your own writing shifts per platform — formality, prompt engineering patterns, vocabulary, message classification |
-| **LLM Judge** | Claude-as-judge evaluation of intellectual depth and creativity on sampled responses (requires API key) |
 
 ### Visualizations
 
-22 plot types generated automatically, including: style fingerprint radar, vocabulary comparison, response length distributions, hedging breakdowns, verbosity ratios, opening patterns, activity timelines, user formality comparison, rephrase rates, depth distribution, and LLM judge score charts. All saved to `data/outputs/plots/`.
+21 plot types generated automatically, including: style fingerprint radar, vocabulary comparison, response length distributions, hedging breakdowns, verbosity ratios, opening patterns, activity timelines, user formality comparison, rephrase rates, and depth distribution. All saved to `data/outputs/plots/`.
 
 ---
 
@@ -104,22 +95,6 @@ python main.py visualize                       # Generate all charts
 python main.py report                          # Generate narrative report
 ```
 
-#### LLM Judge (optional, requires API key)
-
-The LLM judge module calls the Anthropic API and is **not** included in a bare `analyze` run to avoid accidental spend.
-
-```bash
-export ANTHROPIC_API_KEY=sk-ant-...
-
-# Preview the sample, rubrics, and estimated cost before spending money
-python main.py analyze --module llm_judge --dry-run
-
-# Run the full evaluation (~$3-4 for 400 turns)
-python main.py analyze --module llm_judge
-```
-
-Results cache to `data/processed/llm_judge_cache.json`, so interrupted runs resume where they left off.
-
 All commands read paths and parameters from `config.yaml`.
 
 ---
@@ -133,7 +108,7 @@ chatbot-analysis/
 │   │   ├── base.py           #   Turn/Conversation dataclasses + abstract BaseParser
 │   │   ├── claude_parser.py  #   JSON: conversations with typed content blocks
 │   │   ├── gemini_parser.py  #   HTML Takeout: markdownify conversion, time-gap threading
-│   │   └── chatgpt_parser.py #   JSON: tree-walking parser (stub, awaiting data)
+│   │   └── chatgpt_parser.py #   JSON: tree-walking parser for ChatGPT exports
 │   │
 │   ├── analysis/             # Independent modules, each exposing run() -> dict
 │   │   ├── lexical.py        #   Surface-level language (TTR, TF-IDF, readability)
@@ -142,11 +117,10 @@ chatbot-analysis/
 │   │   ├── comparative.py    #   Style fingerprints, topic-controlled comparisons
 │   │   ├── temporal.py       #   Metric trends over time, inflection detection
 │   │   ├── conversation_structure.py  # Depth, rephrase, resolution patterns
-│   │   ├── user_behavior.py  #   User language adaptation across platforms
-│   │   └── llm_judge.py      #   Claude-as-judge: depth + creativity scoring
+│   │   └── user_behavior.py  #   User language adaptation across platforms
 │   │
 │   └── viz/
-│       └── plots.py          # 22 visualization functions + registry
+│       └── plots.py          # 21 visualization functions + registry
 │
 ├── data/
 │   ├── raw/                  # Your export files (gitignored)
@@ -167,9 +141,7 @@ Each analysis module is self-contained: it takes a `list[Conversation]` and conf
 
 **Known data limitations.** Gemini auto-capitalizes user messages, making user-side capitalization analysis unreliable for that source. Gemini conversation boundaries are inferred (not native), so some conversations may be mis-segmented. Sentiment analysis uses a lexicon-based approach (VADER) that skews negative for technical content.
 
-**LLM-as-Judge bias.** The judge module uses Claude to score responses from both Claude and Gemini. This creates a conflict of interest — Claude may unconsciously favor its own style. The depth and creativity scores should be cross-referenced with the traditional NLP metrics, which carry no such bias.
-
-**Privacy.** All analysis runs locally using `all-MiniLM-L6-v2` (sentence-transformers) and `en_core_web_sm` (spaCy). No data leaves your machine. The only exception is the optional LLM judge module, which sends conversation excerpts to the Anthropic API. `data/raw/` and `data/processed/` are gitignored by default.
+**Privacy.** All analysis runs locally using `all-MiniLM-L6-v2` (sentence-transformers) and `en_core_web_sm` (spaCy). No data leaves your machine. `data/raw/` and `data/processed/` are gitignored by default.
 
 ---
 
@@ -179,7 +151,7 @@ Each analysis module is self-contained: it takes a `list[Conversation]` and conf
 |----------|--------|----------|
 | Claude   | Done | Done |
 | Gemini   | Done | Done |
-| ChatGPT  | Stub ready | Awaiting data export |
+| ChatGPT  | Done | Done |
 
 ---
 

@@ -15,9 +15,6 @@ data/outputs/plots/
 !data/outputs/REPORT_public.md
 data/outputs/REPORT.md
 
-# LLM judge cache (contains conversation excerpts)
-data/processed/llm_judge_cache.json
-
 # Python
 __pycache__/
 *.pyc

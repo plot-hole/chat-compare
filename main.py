@@ -44,7 +44,7 @@ _SOURCE_INFO: dict[str, dict] = {
     },
     "chatgpt": {
         "parser_cls": "src.parsers.chatgpt_parser.ChatGPTParser",
-        "detect_files": ["conversations.json"],
+        "detect_files": ["conversations.json", "conversations-000.json"],
     },
 }
 
@@ -178,7 +178,24 @@ def _inspect_gemini(path: Path) -> None:
 
 def _inspect_chatgpt(path: Path) -> None:
     """Pretty-print the structure of the first ChatGPT conversation."""
-    click.echo("  ChatGPT parser not yet implemented.")
+    with open(path, encoding="utf-8") as f:
+        import json as _json
+        data = _json.load(f)
+    click.echo(f"  Type: list, length: {len(data)}")
+    if not data:
+        return
+    first = data[0]
+    click.echo(f"  Top-level keys: {list(first.keys())[:10]}")
+    click.echo(f"  conversation_id: {first.get('conversation_id')}")
+    click.echo(f"  title: {first.get('title')}")
+    mapping = first.get("mapping", {})
+    click.echo(f"  mapping nodes: {len(mapping)}")
+    roles = set()
+    for node in mapping.values():
+        msg = node.get("message")
+        if msg:
+            roles.add(msg.get("author", {}).get("role", "?"))
+    click.echo(f"  roles found: {roles}")
 
 
 # ------------------------------------------------------------------ #
@@ -361,7 +378,6 @@ _ANALYSIS_MODULES: dict[str, str] = {
     "temporal": "src.analysis.temporal",
     "conversation_structure": "src.analysis.conversation_structure",
     "user_behavior": "src.analysis.user_behavior",
-    "llm_judge": "src.analysis.llm_judge",
 }
 
 
@@ -371,9 +387,8 @@ _ANALYSIS_MODULES: dict[str, str] = {
 
 @cli.command()
 @click.option("--module", default=None, help="Run a specific analysis module (e.g. lexical, semantic).")
-@click.option("--dry-run", is_flag=True, default=False, help="For llm_judge: show sample, cost estimate, and example prompts without making API calls.")
 @click.pass_context
-def analyze(ctx: click.Context, module: str | None, dry_run: bool) -> None:
+def analyze(ctx: click.Context, module: str | None) -> None:
     """Run analysis modules on processed data."""
     import importlib
     from typing import Any
@@ -384,11 +399,6 @@ def analyze(ctx: click.Context, module: str | None, dry_run: bool) -> None:
     outputs_root.mkdir(parents=True, exist_ok=True)
 
     conversations = _load_conversations_from_parquet(processed_root)
-
-    # --dry-run only applies to llm_judge.
-    if dry_run and module != "llm_judge":
-        click.echo("  --dry-run is only supported for --module llm_judge")
-        return
 
     modules_to_run = [module] if module else list(_ANALYSIS_MODULES.keys())
 
@@ -410,12 +420,6 @@ def analyze(ctx: click.Context, module: str | None, dry_run: bool) -> None:
         click.echo(f"{'='*70}")
 
         mod = importlib.import_module(_ANALYSIS_MODULES[mod_name])
-
-        # llm_judge: handle --dry-run.
-        if mod_name == "llm_judge" and dry_run:
-            dry_results = mod.dry_run(conversations, config)
-            _print_llm_judge_dry_run(dry_results)
-            continue
 
         # comparative module has a different signature (needs prior results).
         if mod_name == "comparative":
@@ -447,8 +451,6 @@ def analyze(ctx: click.Context, module: str | None, dry_run: bool) -> None:
             _print_conversation_structure_summary(results)
         elif mod_name == "user_behavior":
             _print_user_behavior_summary(results)
-        elif mod_name == "llm_judge":
-            _print_llm_judge_summary(results)
 
 
 def _save_results_json(results: dict, path: Path) -> None:
@@ -1625,146 +1627,6 @@ def _safe_echo(text: str) -> None:
         click.echo(text.encode("ascii", errors="replace").decode("ascii"))
 
 
-def _print_llm_judge_dry_run(results: dict) -> None:
-    """Pretty-print the dry-run results for the LLM judge module."""
-    click.echo(f"\n  {'LLM JUDGE — DRY RUN':=^70}")
-    click.echo(f"  Judge model: {results['model']}")
-
-    click.echo(f"\n  {'SAMPLE BREAKDOWN':=^70}")
-    stats = results.get("sample_stats", {})
-    click.echo(f"  {'Source':<15} {'Sampled':>10} {'Min words':>12} {'Max words':>12} {'Mean words':>12}")
-    click.echo("  " + "-" * 61)
-    for source, s in sorted(stats.items()):
-        click.echo(
-            f"  {source:<15} {s['n_sampled']:>10} "
-            f"{s['word_count_min']:>12} {s['word_count_max']:>12} "
-            f"{s['word_count_mean']:>12.1f}"
-        )
-    click.echo(f"\n  Total turns to evaluate: {results['total_turns']}")
-    click.echo(f"  Total API calls:        {results['total_api_calls']}  (2 dimensions x {results['total_turns']} turns)")
-    click.echo(f"  Estimated cost:         ${results['estimated_cost_usd']:.4f}")
-
-    # Show one example prompt per dimension.
-    example_prompts = results.get("example_prompts", {})
-    first_source = next(iter(example_prompts), None)
-    if first_source and first_source in example_prompts:
-        prompts = example_prompts[first_source]
-
-        click.echo(f"\n  {'EXAMPLE PROMPT — DEPTH':=^70}")
-        click.echo(f"  Source: {first_source}")
-        click.echo(f"\n  [SYSTEM]")
-        # Show first/last few lines of system prompt.
-        sys_lines = prompts["depth"]["system"].split("\n")
-        for line in sys_lines[:3]:
-            click.echo(f"  {line}")
-        if len(sys_lines) > 6:
-            click.echo(f"  ...")
-        for line in sys_lines[-3:]:
-            click.echo(f"  {line}")
-
-        click.echo(f"\n  [USER MESSAGE]")
-        user_text = prompts["depth"]["user"]
-        # Truncate long excerpts for display.
-        lines = user_text.split("\n")
-        for line in lines[:25]:
-            _safe_echo(f"  {line[:120]}")
-        if len(lines) > 25:
-            click.echo(f"  ... ({len(lines) - 25} more lines)")
-
-        click.echo(f"\n  {'EXAMPLE PROMPT — CREATIVITY':=^70}")
-        click.echo(f"  Source: {first_source}")
-        click.echo(f"\n  [SYSTEM]")
-        sys_lines = prompts["creativity"]["system"].split("\n")
-        for line in sys_lines[:3]:
-            click.echo(f"  {line}")
-        if len(sys_lines) > 6:
-            click.echo(f"  ...")
-        for line in sys_lines[-3:]:
-            click.echo(f"  {line}")
-
-        click.echo(f"\n  (Same user message as above)")
-
-    click.echo(f"\n  {'NOTE':=^70}")
-    click.echo("  Claude is judging its own responses alongside competitors.")
-    click.echo("  This creates a potential conflict of interest — cross-reference")
-    click.echo("  with traditional NLP metrics for a fuller picture.")
-    click.echo(f"\n  To run the full evaluation:")
-    click.echo(f"    python main.py analyze --module llm_judge")
-
-
-def _print_llm_judge_summary(results: dict) -> None:
-    """Pretty-print LLM judge evaluation results to the terminal."""
-    click.echo(f"\n  {'LLM JUDGE RESULTS':=^70}")
-
-    cfg = results.get("config", {})
-    click.echo(f"  Model: {cfg.get('model', '?')}")
-    click.echo(f"  Total evaluations: {cfg.get('total_evaluations', '?')}")
-
-    cost = results.get("cost", {})
-    click.echo(f"  Cost: ${cost.get('actual_usd', 0):.4f}  "
-               f"(estimated: ${cost.get('estimated_usd', 0):.4f})")
-    click.echo(f"  Tokens: {cost.get('input_tokens', 0):,} in / "
-               f"{cost.get('output_tokens', 0):,} out")
-
-    for dimension in ("depth", "creativity"):
-        dim_data = results.get(dimension, {})
-        by_source = dim_data.get("by_source", {})
-        sources = sorted(by_source.keys())
-        if not sources:
-            continue
-
-        label = dimension.upper()
-        click.echo(f"\n  {f' {label} ':=^70}")
-
-        header = f"  {'Source':<15} {'Mean':>8} {'Score 1':>10} {'Score 2':>10} {'Score 3':>10} {'N':>8}"
-        click.echo(header)
-        click.echo("  " + "-" * 61)
-        for source in sources:
-            info = by_source[source]
-            mean = info.get("mean")
-            dist = info.get("distribution", {})
-            n = info.get("n_evaluated", 0)
-            mean_str = f"{mean:.3f}" if mean is not None else "N/A"
-            click.echo(
-                f"  {source:<15} {mean_str:>8} "
-                f"{dist.get('1', 0):>10} {dist.get('2', 0):>10} "
-                f"{dist.get('3', 0):>10} {n:>8}"
-            )
-
-        # Statistical test.
-        stat = dim_data.get("statistical_test", {})
-        if "pairwise" in stat:
-            click.echo(f"\n  Statistical tests (Mann-Whitney U):")
-            for pw in stat["pairwise"]:
-                sig = "*" if pw["p_value"] < 0.05 else ""
-                click.echo(
-                    f"    {pw['comparison']}: U={pw['statistic']:.1f}, "
-                    f"p={pw['p_value']:.6f} {sig}"
-                )
-        elif "statistic" in stat:
-            sig = "*" if stat["p_value"] < 0.05 else ""
-            click.echo(
-                f"\n  {stat.get('comparison', '?')}: "
-                f"U={stat['statistic']:.1f}, p={stat['p_value']:.6f} {sig}"
-            )
-
-    # Bias caveat.
-    notes = results.get("data_notes", "")
-    if notes:
-        click.echo(f"\n  {'NOTE':=^70}")
-        # Wrap to ~70 chars.
-        words = notes.split()
-        line = "  "
-        for w in words:
-            if len(line) + len(w) + 1 > 72:
-                click.echo(line)
-                line = "  " + w
-            else:
-                line += " " + w if line.strip() else "  " + w
-        if line.strip():
-            click.echo(line)
-
-
 @cli.command()
 @click.option("--plot", default=None, help="Generate a specific plot (e.g. style_fingerprint).")
 @click.pass_context
@@ -1779,7 +1641,7 @@ def visualize(ctx: click.Context, plot: str | None) -> None:
 
     # Load all available result JSONs.
     result_data: dict[str, dict] = {}
-    for mod_name in ["lexical", "semantic", "pragmatic", "comparative", "temporal", "conversation_structure", "user_behavior", "llm_judge"]:
+    for mod_name in ["lexical", "semantic", "pragmatic", "comparative", "temporal", "conversation_structure", "user_behavior"]:
         path = outputs_root / f"{mod_name}_results.json"
         if path.exists():
             with open(path, encoding="utf-8") as f:
