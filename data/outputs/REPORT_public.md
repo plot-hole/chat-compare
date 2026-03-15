@@ -24,6 +24,7 @@ Topic modeling (BERTopic over all assistant turns) reveals a division of labor. 
 
 **Claude-dominant topics:**
   - **bash, file, env, snowflake** (46 turns, 96% Claude)
+  - **encryption, key, encrypted, encrypt** (37 turns, 73% Claude)
   - **github, real, website, technical** (20 turns, 85% Claude)
 
 **ChatGPT-dominant topics:**
