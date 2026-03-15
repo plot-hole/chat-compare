@@ -33,7 +33,6 @@ Topic modeling (BERTopic over all assistant turns) reveals a division of labor. 
   - **glucose, gsd, liver, glycogen** (68 turns, 100% ChatGPT)
   - **nausea, sugar, water, sodium** (63 turns, 98% ChatGPT)
   - **azalai, scent, molecule** (55 turns, 55% ChatGPT / 46% Gemini)
-  - **bladder, urine, infection, vet** (39 turns, 100% ChatGPT)
   - **land, indigenous, mexico, spanish** (35 turns, 97% ChatGPT)
   - **bugs, insects, flies, bug** (30 turns, 100% ChatGPT)
   - **purview, fabric, data, azure** (26 turns, 73% ChatGPT)
