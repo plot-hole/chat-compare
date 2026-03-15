@@ -27,11 +27,16 @@ Topic modeling (BERTopic over all assistant turns) reveals a division of labor. 
   - **github, real, website, technical** (20 turns, 85% Claude)
 
 **ChatGPT-dominant topics:**
+  - **gpu, laptop, oled, zenbook** (111 turns, 80% ChatGPT)
   - **protein, sauce, cals, chicken** (80 turns, 100% ChatGPT)
   - **glucose, gsd, liver, glycogen** (68 turns, 100% ChatGPT)
   - **nausea, sugar, water, sodium** (63 turns, 98% ChatGPT)
+  - **azalai, scent, molecule** (55 turns, 55% ChatGPT / 46% Gemini)
   - **bladder, urine, infection, vet** (39 turns, 100% ChatGPT)
   - **land, indigenous, mexico, spanish** (35 turns, 97% ChatGPT)
+  - **bugs, insects, flies, bug** (30 turns, 100% ChatGPT)
+  - **purview, fabric, data, azure** (26 turns, 73% ChatGPT)
+  - **ny, york, ave, square** (21 turns, 100% ChatGPT)
 
 **Gemini-dominant topics:**
   - **dolomites, switzerland, swiss, mountain** (39 turns, 69% Gemini)
