@@ -16,7 +16,7 @@ How each model starts its response reveals its default conversational stance:
 
 ![Opening Patterns](docs/images/opening_patterns.png)
 
-Claude leads with acknowledgment ("That's", "You're", "Yeah") while Gemini leads with analysis ("This", "Based", "To"). One validates, then answers. The other answers immediately.
+ChatGPT leads with affirmation — "Yes.", "Exactly.", "Yeah." — while Claude acknowledges the person ("That's", "You're") and Gemini skips straight to analysis ("This", "Based", "To"). Three distinct conversational stances: validate, acknowledge, analyze.
 
 ### The User Changes Too
 
@@ -24,15 +24,15 @@ The same person writes differently depending on which bot they're talking to:
 
 ![User Language Comparison](docs/images/user_language_comparison.png)
 
-Users deploy a richer vocabulary with Claude (MATTR 0.70 vs. 0.68) and ask more questions on Gemini (29.5% of turns vs. 23.1%). Politeness markers are nearly identical across both — the user's courtesy is platform-independent, but their linguistic complexity isn't.
+Users deploy their richest vocabulary with Claude (MATTR 0.70), followed by Gemini (0.68) and ChatGPT (0.65). They ask the most questions on Gemini (29.5% of turns) and the fewest on Claude (23.1%). Politeness markers are nearly identical between Claude and Gemini (~2.4 per 1k words) but drop noticeably on ChatGPT (1.7) — shorter, more transactional exchanges.
 
 ### The Rephrase Gap
 
-Users rephrase their questions — retry with different wording after an unsatisfying answer — nearly **twice as often** on Gemini (24.4%) as on Claude (14.2%):
+Users rephrase their questions — retry with different wording after an unsatisfying answer — at dramatically different rates across platforms:
 
 ![Rephrase Rate](docs/images/rephrasing_rate.png)
 
-This is arguably the most telling user-satisfaction signal in the dataset. If you have to re-ask, the first answer didn't land.
+Gemini's rephrase rate (24.4%) is nearly 6x ChatGPT's (4.3%), with Claude in the middle (14.2%). This is arguably the most telling user-satisfaction signal in the dataset. If you have to re-ask, the first answer didn't land. ChatGPT's low rate likely reflects its longer conversation count (1,570 vs. ~100-120) diluting the signal, but the gap is still striking.
 
 ---
 
